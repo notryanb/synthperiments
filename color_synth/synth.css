@@ -4,10 +4,51 @@
   display: inline-block;
 }
 
+.dark {
+  color: #FFFFFF;
+  background-color: #696969;
+}
+
+.light {
+  color: #696969;
+  background-color: #FFFFFF;
+}
+
+.blank {
+  opacity: 0.1;
+}
+
+.key {
+  display: inline-block;
+  width: 60px;
+  height: 80px;
+  border: 2px solid #efefef;
+  margin: 2px;
+}
+
+
 #container {
   margin-top: 200px;
   margin-left: auto;
   width: 1200px;
+}
+
+
+
+#keyboard {
+  width: 850px;
+  margin: 0 auto;
+}
+
+#row2 {
+  margin-left:35px;
+}
+
+#row3 {
+  margin-left:70px;
+}
+#row4 {
+  margin-left:105px;
 }
 
 #one {

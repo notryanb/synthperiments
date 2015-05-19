@@ -25,19 +25,30 @@ $('#fami-btn').click(function(){
     synth.set({wave:"fami", mul:0.50});
   });
 
+$('#other-btn').click(function(){
+    // synth.set({wave:"square"});
+    pulser = "sin";
+    famiwhami = "saw";
+  });
+
 
 });
-// var synth = T("SynthDef").play();
 
-// synth.def = function(opts) {
-//   var osc1, osc2, env;
-//   osc1 = T("saw", {freq:opts.freq         , mul:0.25});
-//   osc2 = T("square", {freq:opts.freq*2, mul:0.20});
-//   env  = T("linen", {a:1300, s:40, r:150, lv:0.5}, osc1);
-//   return env.on("asdr", opts.doneAction).bang();
-// };
+var synth2 = T("SynthDef").play();
+
+var pulser = "pulse";
+var famiwhami = "fami";
+
+synth2.def = function(opts) {
+  var osc1, osc2, env;
+  osc1 = T(pulser, {freq:opts.freq         , mul:0.25});
+  osc2 = T(famiwhami, {freq:opts.freq*2, mul:0.20});
+  env  = T("linen", {s:40, r:150, lv:0.5}, osc1, osc2);
+  return env.on("asdr", opts.doneAction).bang();
+};
 
 var synth = T("OscGen", {wave:"fami", mul:1}).play();
+
 
 var keydict = T("ndict.key");
 var midicps = T("midicps");
@@ -47,6 +58,7 @@ T("keyboard").on("keydown", function(e) {
     boxSelect(midi);
     var freq = midicps.at(midi);
     synth.noteOnWithFreq(freq, 50);
+    // synth2.noteOn(midi, 50);
   }
 }).on("keyup", function(e) {
   var midi = keydict.at(e.keyCode);
