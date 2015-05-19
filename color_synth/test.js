@@ -56,6 +56,7 @@ T("keyboard").on("keydown", function(e) {
   var midi = keydict.at(e.keyCode);
   if (midi) {
     boxSelect(midi);
+    console.log(midi);
     var freq = midicps.at(midi);
     synth.noteOnWithFreq(freq, 50);
     // synth2.noteOn(midi, 50);
@@ -69,33 +70,9 @@ T("keyboard").on("keydown", function(e) {
 }).start();
 
 function boxSelect(midi) {
-  if (midi % 1 == 1){
-    $('#one').css('opacity', '0.5');
-  } else if (midi % 2 == 1){
-    $('#two').css('opacity', '0.5');
-  } else if (midi % 3 == 1){
-    $('#three').css('opacity', '0.5');
-  } else if (midi % 4 == 1){
-    $('#four').css('opacity', '0.5');
-  } else if (midi % 5 == 1){
-    $('#five').css('opacity', '0.5');
-  } else {
-    $('#six').css('opacity', '0.5');
-  }
+  $('#_'+midi).css('opacity', '0.5');
 };
 
 function boxUnselect(midi) {
-  if (midi % 1 == 1){
-    $('#one').css('opacity', '1.0');
-  } else if (midi % 2 == 1){
-    $('#two').css('opacity', '1.0');
-  } else if (midi % 3 == 1){
-    $('#three').css('opacity', '1.0');
-  } else if (midi % 4 == 1){
-    $('#four').css('opacity', '1.0');
-  } else if (midi % 5 == 1){
-    $('#five').css('opacity', '1.0');
-  } else {
-    $('#six').css('opacity', '1.0');
-  }
+   $('#_'+midi).css('opacity', '1.0');
 };
