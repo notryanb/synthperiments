@@ -1,0 +1,45 @@
+.box{
+  height: 180px;
+  width: 180px;
+  display: inline-block;
+}
+
+#container {
+  margin-top: 300px;
+  margin-left: auto;
+  width: 1200px;
+}
+
+#one {
+  border: 5px solid #7F1F27;
+  background-color:#CC323E;
+}
+
+#two {
+  border: 5px solid #CC5718;
+  background-color:#FF6D1E;
+}
+
+#three {
+  border: 5px solid #FFC005;
+  background-color:#FFD352;
+}
+
+#four {
+  border: 5px solid #007F56;
+  background-color:#00CC89;
+}
+
+#five {
+  border: 5px solid #005D7F;
+  background-color:#0096CC;
+}
+
+#six {
+  border: 5px solid #56267F;
+  background-color:#8800FF;
+}
+
+body {
+  background-color: #000000;
+}
