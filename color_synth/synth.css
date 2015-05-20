@@ -4,21 +4,12 @@
   display: inline-block;
 }
 
-.dark {
-  color: #FFFFFF;
-  background-color: #696969;
-}
-
-.light {
-  color: #696969;
-  background-color: #FFFFFF;
-}
-
 .blank {
   opacity: 0.1;
 }
 
 .key {
+  color: #000000;
   padding: 1px;
   font-family: Verdana;
   display: inline-block;
