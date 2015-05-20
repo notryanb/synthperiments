@@ -46,12 +46,20 @@ $('#off2-btn').click(function(){
     osc2Wave = "";
   });
 
-$('#lfo1-btn').click(function(){
+$('#lfo1on-btn').click(function(){
     lfo1Switch = true;
   });
 
-$('#lfo2-btn').click(function(){
+$('#lfo1off-btn').click(function(){
+    lfo1Switch = false;
+  });
+
+$('#lfo2on-btn').click(function(){
     lfo2Switch = true;
+  });
+
+$('#lfo2off-btn').click(function(){
+    lfo2Switch = false;
   });
 });
 
@@ -59,8 +67,8 @@ $('#lfo2-btn').click(function(){
 
 
 // SYNTH 2-----------
-var osc1Wave = "pulse";
-var osc2Wave = "fami";
+var osc1Wave = "sin";
+var osc2Wave = "sin";
 var lfo1Switch = false;
 var lfo2Switch = false;
 
@@ -83,7 +91,7 @@ synth2.def = function(opts) {
   var osc1, osc2, env;
   
   osc1 = T(osc1Wave, {freq: fx(opts), mul:0.25});
-  osc2 = T(osc2Wave, {freq: fx(opts) * 4, mul:0.20});
+  osc2 = T(osc2Wave, {freq: fx(opts), mul:0.20});
   env  = T("linen", {s:40, r:1050, lv:0.5}, osc1, osc2);
   return env.on("ended", opts.doneAction).bang();
 };
@@ -99,9 +107,6 @@ T("keyboard").on("keydown", function(e) {
   var midi = keydict.at(e.keyCode);
   if (midi) {
     boxSelect(midi);
-    // console.log(midi);
-    // var freq = midicps.at(midi);
-
     synth2.noteOn(midi, 50);
   }
 }).on("keyup", function(e) {
