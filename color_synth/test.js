@@ -1,113 +1,110 @@
 "use strict";
 
 $().ready(function(){ 
-// var LFO = T("sin", {freq:"250ms",  mul:5, add:880}).kr();
 
+  var innerColors = ["#993D4E",
+                     "#99513D",
+                     "#99643D",
+                     "#99913D",
+                     "#74993D",
+                     "#3D9952",
+                     "#3D9987",
+                     "#3D7999",
+                     "#595099",
+                     "#944699"];
 
+  var borderColors = ["#CC052A",
+                      "#CC3007",
+                      "#CC5A05",
+                      "#CCBA00",
+                      "#7FCC0D",
+                      "#07CC35",
+                      "#08CCA7",
+                      "#0C89CC",
+                      "#3B25CC",
+                      "#C118CC"];
 
-// More Experimenting
-$('#sin1-btn').click(function(){
-    osc1Wave = "sin";
-  });
+   $('.key').each(function(i, k){
+    // k.body.style.background = borderColors[i%10];
+    $(k).css('background', borderColors[i%10]);
+    $(k).css('border-color', innerColors[i%10]);
+   });
 
-$('#sin2-btn').click(function(){
-    osc2Wave = "sin";
-  });
+    // ------- UI --------
+    $(".wave").click(function(e){
+      var $this = $(this);
+      var newWave = $this.data('wave');
 
-$('#square1-btn').click(function(){
-    osc1Wave = "square";
-  });
+      if ($this.hasClass('osc1')) { 
+        waveForm.osc1Wave = newWave; }
+      if ($this.hasClass('osc2')) { 
+        waveForm.osc2Wave = newWave; }
+    });
 
-$('#square2-btn').click(function(){
-    osc2Wave = "square";
-  });
+    $('#lfo1-btn').click(function(){
+        if (!waveForm.lfo1Switch) {
+          waveForm.lfo1Switch = true;
+          this.innerHTML = "LFO On";
+        } else {
+          waveForm.lfo1Switch = false;
+          this.innerHTML = "LFO Off";
+        }
+      });
 
-$('#saw1-btn').click(function(){
-    osc1Wave = "saw";
-  });
+    $('#lfo2-btn').click(function(){
+        if (!waveForm.lfo2Switch) {
+          waveForm.lfo2Switch = true;
+          this.innerHTML = "LFO On";
+        } else {
+          waveForm.lfo2Switch = false;
+          this.innerHTML = "LFO Off";
+        }
+      });
 
-$('#saw2-btn').click(function(){
-    osc2Wave = "saw";
-  });
-
-$('#fami1-btn').click(function(){
-    osc1Wave = "fami";
-  });
-
-$('#fami2-btn').click(function(){
-    osc2Wave = "fami";
-  });
-
-$('#off1-btn').click(function(){
-    osc1Wave = "";
-  });
-
-$('#off2-btn').click(function(){
-    osc2Wave = "";
-  });
-
-$('#lfo1on-btn').click(function(){
-    lfo1Switch = true;
-  });
-
-$('#lfo1off-btn').click(function(){
-    lfo1Switch = false;
-  });
-
-$('#lfo2on-btn').click(function(){
-    lfo2Switch = true;
-  });
-
-$('#lfo2off-btn').click(function(){
-    lfo2Switch = false;
-  });
 });
 
 
+// Defaults values
+var waveForm = {
+  "osc1Wave": "sin",
+  "osc2Wave": "sin",
+  "lfo1Switch": false,
+  "lfo2Switch": false
+}
 
 
-// SYNTH 2-----------
-var osc1Wave = "sin";
-var osc2Wave = "sin";
-var lfo1Switch = false;
-var lfo2Switch = false;
-
-
-// Returns FX with freq or just freq.
+// --- Helper Functions to buffer FX -----
 var fx = function (opts) {
-  if (lfo1Switch) { return lfoModule(opts);  }
-  else if (lfo2Switch) { return lfoModule(opts);  }
+  if (waveForm.lfo1Switch) { return lfoModule(opts);  }
+  else if (waveForm.lfo2Switch) { return lfoModule(opts);  }
   else { return opts.freq; } 
 };
 
 var lfoModule = function(opts) {
-    var lfo = T("sin", {freq: "250ms", mul:3, add:opts.freq}).kr();
+    var lfo = T("sin", {freq: "200ms", mul:5, add:opts.freq}).kr();
     return lfo;
 };
 
-var synth2 = T("SynthDef").play();
+// --------Define Synthesizer----------
+var synth = T("SynthDef").play();
 
-synth2.def = function(opts) {
+synth.def = function(opts) {
   var osc1, osc2, env;
   
-  osc1 = T(osc1Wave, {freq: fx(opts), mul:0.25});
-  osc2 = T(osc2Wave, {freq: fx(opts), mul:0.20});
+  osc1 = T(waveForm.osc1Wave, {freq: fx(opts), mul:0.25});
+  osc2 = T(waveForm.osc2Wave, {freq: fx(opts), mul:0.20});
   env  = T("linen", {s:40, r:1050, lv:0.5}, osc1, osc2);
   return env.on("ended", opts.doneAction).bang();
 };
 
-// -------------------
-
-
-
-
+// ----- Key Controller ------------
 var keydict = T("ndict.key");
 var midicps = T("midicps");
 T("keyboard").on("keydown", function(e) {
   var midi = keydict.at(e.keyCode);
   if (midi) {
     boxSelect(midi);
-    synth2.noteOn(midi, 50);
+    synth.noteOn(midi, 50);
   }
 }).on("keyup", function(e) {
   var midi = keydict.at(e.keyCode);
@@ -124,3 +121,4 @@ function boxSelect(midi) {
 function boxUnselect(midi) {
    $('#_'+midi).css('opacity', '1.0');
 };
+
