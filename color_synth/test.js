@@ -14,12 +14,12 @@ $('#sin2-btn').click(function(){
     osc2Wave = "sin";
   });
 
-$('#pulse1-btn').click(function(){
-    osc1Wave = "pulse";
+$('#square1-btn').click(function(){
+    osc1Wave = "square";
   });
 
-$('#pulse2-btn').click(function(){
-    osc2Wave = "pulse";
+$('#square2-btn').click(function(){
+    osc2Wave = "square";
   });
 
 $('#saw1-btn').click(function(){
@@ -38,7 +38,21 @@ $('#fami2-btn').click(function(){
     osc2Wave = "fami";
   });
 
+$('#off1-btn').click(function(){
+    osc1Wave = "";
+  });
 
+$('#off2-btn').click(function(){
+    osc2Wave = "";
+  });
+
+$('#lfo1-btn').click(function(){
+    lfo1Switch = true;
+  });
+
+$('#lfo2-btn').click(function(){
+    lfo2Switch = true;
+  });
 });
 
 
@@ -47,18 +61,29 @@ $('#fami2-btn').click(function(){
 // SYNTH 2-----------
 var osc1Wave = "pulse";
 var osc2Wave = "fami";
+var lfo1Switch = false;
+var lfo2Switch = false;
 
+
+// Returns FX with freq or just freq.
+var fx = function (opts) {
+  if (lfo1Switch) { return lfoModule(opts);  }
+  else if (lfo2Switch) { return lfoModule(opts);  }
+  else { return opts.freq; } 
+};
+
+var lfoModule = function(opts) {
+    var lfo = T("sin", {freq: "250ms", mul:3, add:opts.freq}).kr();
+    return lfo;
+};
 
 var synth2 = T("SynthDef").play();
 
 synth2.def = function(opts) {
-  var osc1, osc2, lfo, env;
-
-  lfo = T("sin", {freq: "250ms", mul:3, add:opts.freq}).kr();
-
+  var osc1, osc2, env;
   
-  osc1 = T(osc1Wave, {freq:opts.freq       , mul:0.25});
-  osc2 = T(osc2Wave, {freq:opts.freq * 10, mul:0.20});
+  osc1 = T(osc1Wave, {freq: fx(opts), mul:0.25});
+  osc2 = T(osc2Wave, {freq: fx(opts) * 4, mul:0.20});
   env  = T("linen", {s:40, r:1050, lv:0.5}, osc1, osc2);
   return env.on("ended", opts.doneAction).bang();
 };
